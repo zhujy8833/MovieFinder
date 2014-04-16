@@ -1,11 +1,13 @@
 var helper = require("../libs/routeHelper");
 var keys = require("../config/configuration").keys;
 var NodeCache = require( "node-cache" );
+var async = require("async");
+var request = require("request");
 var _= require("underscore");
 var cache = new NodeCache();
 var CACHE_KEY = "data_cache_movie";
 
-var GEOLOCATION_ZERO = "ZERO_RESULTS";
+var GEOLOCATION_OK = "OK";
 
 /*
  * GET home page.
@@ -16,7 +18,8 @@ exports.index = function(req, res){
 };
 
 var getLocation = function(location, callback) {
-	var apiKey = keys.google_map_key;
+    if(!location) return;
+	var apiKey = keys.google_map_key2;
 	//var geourl = encodeURIComponent("https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&sensor=true&key=" + apiKey);
 	var options = {
 		host: 'maps.googleapis.com',
@@ -32,7 +35,7 @@ var getLocation = function(location, callback) {
 };
 
 exports.test = function(req, res) {
-    var address = "Hills Brothers Plaza (Embarcadero at Harrison Street)";
+    var address = "Epic Roasthouse (399 Embarcadero)";
     getLocation(address, function(statusCode, jsonObj){
          res.json(jsonObj);
     });
@@ -90,7 +93,47 @@ exports.getData = function(req, res) {
  				allData.push(obj);
  			});
  			resData = allData;
- 			cache.set(CACHE_KEY, JSON.stringify(allData));
+ 			cache.set(CACHE_KEY, JSON.stringify(resData));
+//            var arr = resData.slice(0,2);
+//            async.map(arr, function(eachMovieObj, cb){
+////               getLocation(eachMovieObj["Locations"], function(code, jsonObj){
+////                    //var copy = _.extend({}, eachMovieObj);
+////                    if(jsonObj.status === GEOLOCATION_OK && jsonObj.results.length > 0){
+////                        var locationObj = jsonObj.results[0].geometry && jsonObj.results[0].geometry ? jsonObj.results[0].geometry.location : {};
+////                        if(!_.isEmpty(locationObj)) {
+////                            eachMovieObj.geometry = locationObj;
+////                        }
+////                        //cb(null, 3);
+////                    }
+////                   //console.log(eachMovieObj);
+////                   cb(null, eachMovieObj);
+////
+////               });
+//                var apiKey = keys.google_map_key2;
+//                var geourl = "https://maps.googleapis.com/maps/api/geocode/json?address=" + encodeURIComponent(eachMovieObj["Locations"]) + "&sensor=true&key=" + apiKey;
+//               //cb(null, eachMovieObj);
+//                request(geourl, function(err, res, body){
+//                    if(err) {
+//                        cb(err);
+//                    } else {
+//                        var jsonObj = JSON.parse(body);
+//                        if(jsonObj.status === GEOLOCATION_OK && jsonObj.results.length > 0){
+//                            var locationObj = jsonObj.results[0].geometry && jsonObj.results[0].geometry ? jsonObj.results[0].geometry.location : {};
+//                            if(!_.isEmpty(locationObj)) {
+//                                eachMovieObj.geometry = locationObj;
+//                            }
+//                            cb(null, eachMovieObj);
+//                        }
+//                    }
+//                });
+//
+//            }, function(err, results){
+//                if(err != null) {
+//                } else {
+//                    console.log(results);
+//
+//                }
+//            });
 
 	 		res.json(handleData(resData));
 	 	});

@@ -29,15 +29,48 @@ require.config({
     }
 
      // script(type="text/javascript", src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDf7Q0VyGUbeEpknXulcLsBdBMgT4AQZgE&sensor=true") -->
-     // script(type="text/javascript").
-     //  function initialize() {
-     //    var mapOptions = {
-     //      center: new google.maps.LatLng(-34.397, 150.644),
-     //      zoom: 8
-     //    };
-     //    var map = new google.maps.Map(document.getElementById("map-canvas"),
-     //        mapOptions);
-     //  }
-     //  google.maps.event.addDomListener(window, 'load', initialize); 
+//     script(type="text/javascript").
+//       function initialize() {
+//         var mapOptions = {
+//           center: new google.maps.LatLng(-34.397, 150.644),
+//           zoom: 8
+//         };
+//         var map = new google.maps.Map(document.getElementById("map-canvas"),
+//             mapOptions);
+//       }
+//       google.maps.event.addDomListener(window, 'load', initialize);
 
+
+});
+
+require(["jquery"], function($){
+    function initialize() {
+        var mapOptions = {
+            center: new google.maps.LatLng(-34.397, 150.644),
+            zoom: 15
+        };
+        var geocoder = new google.maps.Geocoder();;
+        var map = new google.maps.Map(document.getElementById("map-canvas"),
+            mapOptions);
+
+        var addresses = ["1425 Fillmore Street", "706 Mission Street", "Golden Gate Park", "720 Market Street", "553 8th Ave", "1489 Webster Street"];
+
+        $.each(addresses, function(index, addr){
+            geocoder.geocode( { 'address': addr}, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    map.setCenter(results[0].geometry.location);
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location
+                    });
+
+                } else {
+                    alert("Geocode was not successful for the following reason: " + status);
+                }
+            });
+        });
+
+    };
+    $(document).ready(initialize);
+    //google.maps.event.addDomListener(window, 'load', initialize);
 });
