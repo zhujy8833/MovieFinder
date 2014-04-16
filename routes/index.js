@@ -71,7 +71,9 @@ exports.getData = function(req, res) {
 
 	if(!_.isEmpty(cachedData)) {
 		resData = JSON.parse(cachedData[CACHE_KEY]);
-		res.json(handleData(resData));
+        resData.allData = handleData(resData.allData);
+		res.json(resData);
+
 	} else {
  		helper.getJSON(options, function(statusCode, jsonObj){
  			var columns = jsonObj.meta.view.columns;
@@ -92,7 +94,10 @@ exports.getData = function(req, res) {
  				});
  				allData.push(obj);
  			});
- 			resData = allData;
+ 			resData = {
+                movies : _.uniq(_.pluck(allData, "Title")),
+                allData : allData
+            };
  			cache.set(CACHE_KEY, JSON.stringify(resData));
 //            var arr = resData.slice(0,2);
 //            async.map(arr, function(eachMovieObj, cb){
@@ -134,8 +139,8 @@ exports.getData = function(req, res) {
 //
 //                }
 //            });
-
-	 		res.json(handleData(resData));
+            resData.allData = handleData(resData.allData);
+            res.json(resData);
 	 	});
 
  	}
