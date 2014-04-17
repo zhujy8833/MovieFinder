@@ -4,6 +4,7 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/map.mus
 
         var MapView = Backbone.View.extend({
             markers : {},
+            timeoutList : [],
             initialize : function(options) {
                 var view = this;
                 view.data = options.data || [];
@@ -35,7 +36,8 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/map.mus
                 var selectedMarker = view.markers[entryId];
                 if(selectedMarker) {
                     view.map.setCenter(selectedMarker.position);
-                    view.markerOpenWindow(selectedMarker); 
+                    view.markerOpenWindow(selectedMarker);
+                    view.toggleBounce(selectedMarker); 
                 }
             },
 
@@ -49,6 +51,24 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/map.mus
                 if(marker){
                     var infoWindow = marker.infoWindow;
                     infoWindow.open(view.map , marker);
+                }
+            },
+
+            toggleBounce : function(marker) {
+                var view = this;
+//                currentIcon.setAnimation(null);
+                if(marker.getAnimation() != null) {
+                    marker.setAnimation(null);
+                } else {
+                    _.each(view.timeoutList, function(timeoutId){
+                        clearTimeout(timeoutId);
+                    });
+                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                    var timeoutId = setTimeout(function(){
+                        marker.setAnimation(null); 
+                    }, 1400);
+                    view.timeoutList.push(timeoutId);
+
                 }
             },
 
@@ -67,22 +87,19 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/map.mus
                                 title : Mustache.render(markerTemplate, d)
                                 
                             });
+                            marker.markerId = d.id;
                             marker.infoWindow = new google.maps.InfoWindow({
                                 content: marker.title,
                                 maxWidth : 200 
                             });
-                            //console.log(results[0].geometry.location);
+
                             if(!view.markers[d.id]) {
                                 view.markers[d.id] = marker;
                             }
-                            //marker.openInfoWindowHtml(Mustache.render(markerTemplate, d));
+
                             google.maps.event.addListener(marker, 'click', function() {
                                 view.markerOpenWindow(marker);
-                                // if (marker.getAnimation() != null) {
-                                //     marker.setAnimation(null);
-                                // } else {
-                                //     marker.setAnimation(google.maps.Animation.BOUNCE);
-                                // }
+                                view.toggleBounce(marker);
                             });
 
                         } else {
@@ -90,8 +107,6 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/map.mus
                         }
                     });
                 });
-                console.log(view.markers);
-                //view.$el.html(Mustache.render(template));
             }
         });
         return MapView;
