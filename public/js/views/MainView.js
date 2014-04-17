@@ -67,8 +67,10 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/main.mu
                             parentView: view,
                             data : data
                         };
-                        var listView = new ListView($.extend({el : "#list"}, sharedObj));
-                        var mapView = new MapView($.extend({el : "#map", listView : listView}, sharedObj));
+                        view.mapView = new MapView($.extend({el : "#map"}, sharedObj));
+                        view.listView = new ListView($.extend({el : "#list", mapView : view.mapView}, sharedObj));
+                        
+
                     },
                     error : function() {
 

@@ -1,24 +1,28 @@
-/**
- * Created with JetBrains WebStorm.
- * User: jz
- * Date: 4/16/14
- * Time: 18:16
- * To change this template use File | Settings | File Templates.
- */
-
-//Initialize ListView, Mapview
 
 define(["backbone", "underscore", "jquery", "mustache", "text!/templates/list.mustache.html"],
     function(Backbone, _, $, Mustache, template){
 
         var ListView = Backbone.View.extend({
 
+            events : {
+                "click li.list-item" : "selectMarker"
+            },
 
             initialize : function(options) {
                 var view = this;
                 view.data = options.data || [];
+                view.parentView = options.parentView;
+                view.mapView = options.mapView;
                 view.render();
 
+            },
+
+            selectMarker : function(event) {
+                var view = this;
+                var entryId = $(event.currentTarget).data("id");
+                if(view.mapView) {
+                    view.mapView.mapTo(entryId);
+                }
             },
 
             render : function() {

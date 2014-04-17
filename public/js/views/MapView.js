@@ -30,6 +30,28 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/map.mus
                 view.$el.html(Mustache.render(template));
             },
 
+            mapTo : function(entryId) {
+                var view = this;
+                var selectedMarker = view.markers[entryId];
+                if(selectedMarker) {
+                    view.map.setCenter(selectedMarker.position);
+                    view.markerOpenWindow(selectedMarker); 
+                }
+            },
+
+            markerOpenWindow : function(marker, allowMultiple) {
+                var view = this;
+                if(!allowMultiple) {
+                    _.each(view.markers,function(marker){
+                        marker.infoWindow.close()
+                    });
+                }
+                if(marker){
+                    var infoWindow = marker.infoWindow;
+                    infoWindow.open(view.map , marker);
+                }
+            },
+
             paint : function() {
                 var view = this;
                 var addresses = _.pluck(view.data, "Locations").map(function(addr){
@@ -43,25 +65,32 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/map.mus
                                 map: view.map,
                                 position: results[0].geometry.location,
                                 title : Mustache.render(markerTemplate, d)
+                                
                             });
+                            marker.infoWindow = new google.maps.InfoWindow({
+                                content: marker.title,
+                                maxWidth : 200 
+                            });
+                            //console.log(results[0].geometry.location);
                             if(!view.markers[d.id]) {
                                 view.markers[d.id] = marker;
                             }
                             //marker.openInfoWindowHtml(Mustache.render(markerTemplate, d));
                             google.maps.event.addListener(marker, 'click', function() {
-
-                                if (marker.getAnimation() != null) {
-                                    marker.setAnimation(null);
-                                } else {
-                                    marker.setAnimation(google.maps.Animation.BOUNCE);
-                                }
+                                view.markerOpenWindow(marker);
+                                // if (marker.getAnimation() != null) {
+                                //     marker.setAnimation(null);
+                                // } else {
+                                //     marker.setAnimation(google.maps.Animation.BOUNCE);
+                                // }
                             });
 
                         } else {
-                            alert("Geocode was not successful for the following reason: " + status);
+                            //Geocode not found
                         }
                     });
                 });
+                console.log(view.markers);
                 //view.$el.html(Mustache.render(template));
             }
         });
