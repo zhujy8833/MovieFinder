@@ -3,6 +3,7 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/map.mus
     function(Backbone, _, $, Mustache, template, markerTemplate){
 
         var MapView = Backbone.View.extend({
+            markers : {},
             initialize : function(options) {
                 var view = this;
                 view.data = options.data || [];
@@ -43,6 +44,9 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/map.mus
                                 position: results[0].geometry.location,
                                 title : Mustache.render(markerTemplate, d)
                             });
+                            if(!view.markers[d.id]) {
+                                view.markers[d.id] = marker;
+                            }
                             //marker.openInfoWindowHtml(Mustache.render(markerTemplate, d));
                             google.maps.event.addListener(marker, 'click', function() {
 
