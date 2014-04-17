@@ -1,20 +1,17 @@
 var helper = require("../libs/routeHelper");
 var keys = require("../config/configuration").keys;
 var NodeCache = require( "node-cache" );
-var async = require("async");
 var request = require("request");
 var _= require("underscore");
 var cache = new NodeCache();
 var DATA_CACHE_KEY = "cache_data";
-
-var GEOLOCATION_OK = "OK";
 
 /*
  * GET home page.
  */
 
 exports.index = function(req, res){
-  	res.render('index', { title: 'Express' });
+  	res.render('index', { title: 'Movie Finder' });
 };
 
 var getLocation = function(location, callback) {

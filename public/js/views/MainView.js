@@ -1,11 +1,3 @@
-/**
- * Created with JetBrains WebStorm.
- * User: jz
- * Date: 4/16/14
- * Time: 18:16
- * To change this template use File | Settings | File Templates.
- */
-
 //Initialize ListView, Mapview
 
 define(["backbone", "underscore", "jquery", "mustache", "text!/templates/main.mustache.html", "views/ListView", "views/MapView", "jquery-ui"],
