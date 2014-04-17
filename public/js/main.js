@@ -16,15 +16,16 @@ require.config({
         //"zepto": "vendor/zepto/zepto.min",
         "jquery": "vendor/jquery",
         "underscore": "vendor/underscore",
-        "backbone": "vendor/backbone/backbone",
+        "backbone": "vendor/backbone",
         //"backbone-relational": "vendor/backbone-relational/backbone-relational",
         //"foundation": "vendor/foundation/js/foundation.min",
-        "mustache": "vendor/mustache/mustache",
+        "mustache": "vendor/mustache",
+        "text": "vendor/require-text",
         //"modernizr": "vendor/foundation/js/vendor/custom.modernizr",
         //"moment": "vendor/moment.min",
         //"codemirror": "vendor/codemirror/lib/codemirror.min",
         //"select2" : "../select2/select2.min",
-        //"jquery-ui": "vendor/jquery-ui/ui/jquery-ui"
+        "jquery-ui": "//code.jquery.com/ui/1.10.4/jquery-ui"
 
     }
 
@@ -64,6 +65,9 @@ require(["jquery"], function($){
                         position: results[0].geometry.location
                     });
 
+                    marker.openInfoWindowHtml(place.address + '<br>' +
+                        '<b>Country code:</b> ' + place.AddressDetails.Country.CountryNameCode);
+
                 } else {
                     alert("Geocode was not successful for the following reason: " + status);
                 }
@@ -71,6 +75,10 @@ require(["jquery"], function($){
         });
 
     };
-    $(document).ready(initialize);
+   // $(document).ready(initialize);
+    require(["backbone", "routers/IndexRoute"],function(Backbone, IndexRoute){
+          var indexRoute = new IndexRoute();
+          Backbone.history.start();
+    });
     //google.maps.event.addDomListener(window, 'load', initialize);
 });

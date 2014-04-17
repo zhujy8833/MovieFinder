@@ -7,7 +7,34 @@ a {
 	color: #00B7FF;
 }
 
+.ui-autocomplete {
+    max-height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.content{
+
+}
+
+.content > div{
+    display: inline-block;
+    vertical-align: text-top;
+}
+
+ul.list-ul{
+
+}
+
+ul.list-ul li{
+
+}
+
+ul.list-ul li span {
+
+}
+
 #map-canvas {
-	height : 700px;
-	width : 800px;
+	height : 500px;
+	width : 500px;
 }
