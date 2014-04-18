@@ -1,6 +1,6 @@
 
-define(["backbone", "underscore", "jquery", "mustache", "text!/templates/map.mustache.html", "text!/templates/marker.mustache.html"],
-    function(Backbone, _, $, Mustache, template, markerTemplate){
+define(["backbone", "underscore", "jquery", "mustache", "text!/templates/marker.mustache.html"],
+    function(Backbone, _, $, Mustache, markerTemplate){
         var timeoutId;
         var MapView = Backbone.View.extend({
             markers : {},
@@ -10,29 +10,8 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/map.mus
                 view.map = options.map;
                 view.geocoder = options.geocoder;
                 view.parentView = options.parentView;
-                //view.render();
-                //view.mapInit();
                 view.clearMarkers();
-                //setTimeout(function(){view.paint();}, 5000);
                 view.paint();
-            },
-
-            // mapInit : function() {
-            //     var view = this;
-            //     var mapOptions = {
-            //         center: new google.maps.LatLng(-34.397, 150.644),
-            //         zoom: 12
-            //     };
-            //     var geocoder = new google.maps.Geocoder();;
-            //     var map = new google.maps.Map(view.$("#map-canvas")[0],
-            //         mapOptions);
-            //     view.geocoder = geocoder;
-            //     view.map = map;
-            // },
-
-            render : function() {
-                var view = this;
-                //view.$el.html(Mustache.render(template));
             },
 
             mapTo : function(entryId) {
@@ -87,7 +66,6 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/map.mus
                 var addresses = _.pluck(view.data, "Locations").map(function(addr){
                     return [addr, "San Francisco"].join(" ");
                 });
-                //var markerArray = [];
                 $.each(view.data, function(index, d){
                     $.ajax({
                         type : "GET",

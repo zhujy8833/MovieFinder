@@ -98,7 +98,6 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/main.mu
 
             render : function() {
                 var view = this;
-                //var baseUrl = "/movies";
                 $("#container").html(view.$el.html(Mustache.render(template)));
                 var defaultOpt = {start: 0, num : 10};
                 if(view.movies) {
