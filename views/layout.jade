@@ -1,7 +1,11 @@
-doctype 5
+doctype html
 html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel="stylesheet", href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css")
+
   body
     block content
+    script(type="text/javascript", src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxNWkQW4R5jRZ51_iYnAWvEKA8hVGHF2s&sensor=true")
+    script(src="js/vendor/require.min.js", data-main="js/main")
