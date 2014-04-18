@@ -16,23 +16,43 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/main.mu
                 num : 10
             },
 
-
+            currentMarkers : [],
             events: {
-               "click top-bar > button" : "buttonClick"
+               "click .top-bar > button" : "buttonClick"
             },
-
-            buttonClick : function() {
+            mapInit : function() {
                 var view = this;
-                return function(event) {
-                    alert($(event.currentTarget).attr("id"));
-
+                var mapOptions = {
+                    center: new google.maps.LatLng(-34.397, 150.644),
+                    zoom: 12
                 };
+                var geocoder = new google.maps.Geocoder();;
+                var map = new google.maps.Map(view.$("#map-canvas")[0],
+                    mapOptions);
+                view.geocoder = geocoder;
+                view.map = map;
             },
+            buttonClick : function(event) {
+                var view = this;
+                var buttonId = $(event.currentTarget).attr("id");
+                if($(event.currentTarget).hasClass("disabled")) return;
+                if(buttonId === 'previous') {
+                    view.listControl.start = view.listControl.start - view.listControl.num; 
+                } else if(buttonId === 'next') {
+                    view.listControl.start = view.listControl.start + view.listControl.num;
+                }
+                view.renderViews({
+                    start : view.listControl.start,
+                    num : view.listControl.num
+                });
+            },
+
             initialize : function(options) {
                 var view = this;
                 view.router = options.router;
                 view.movies = options.movies;
                 view.render();
+                view.mapInit();
 
 
             },
@@ -54,12 +74,17 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/main.mu
                         start : options.start,
                         num : options.num
                     },
-                    success : function(data) {
+                    success : function(d) {
                         var sharedObj = {
                             parentView: view,
-                            data : data
+                            data : d.data,
+                            dataLength : d.length
                         };
-                        view.mapView = new MapView($.extend({el : "#map"}, sharedObj));
+                        //if(view.listControl.start + view.listControl.num >= d.length - 1) {
+                        view.$("#next").toggleClass("disabled", view.listControl.start + view.listControl.num >= d.length - 1);
+                        view.$("#previous").toggleClass("disabled", view.listControl.start == 0);
+                        //}
+                        view.mapView = new MapView($.extend({el : "#map", map : view.map, geocoder : view.geocoder}, sharedObj));
                         view.listView = new ListView($.extend({el : "#list", mapView : view.mapView}, sharedObj));
                         
 

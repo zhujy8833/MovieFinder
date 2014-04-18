@@ -47,31 +47,47 @@ var retrieve = function(callback, field) {
             'Content-Type': 'application/json'
         }
     };
+    var query = query || {};
     helper.getJSON(options, function(statusCode, jsonObj){
         var columns = jsonObj.meta.view.columns;
         var allData = [];
 
         _.each(jsonObj.data, function(d){
             var obj = {
-                actors : []
+                //actors : []
             };
+            var actors = [];
             _.each(d, function(value, index){
                 var column = columns[index];
                 if(column.name.indexOf("Actor") != -1) {
-                    if(value !== null) obj.actors.push(value);
+                    if(value !== null) actors.push(value);
                 } else {
                     obj[column.name] = value;
                 }
             });
+            obj.actors = actors.join(",");
             allData.push(obj);
         });
+        allData = allData.sort(function(a, b) {
+        	return a.position - b.position;
+        });
+
         if(field) {
             allData = _.uniq(_.pluck(allData, field));
             cache.set(field, JSON.stringify(allData));
         } else {
             cache.set(DATA_CACHE_KEY, JSON.stringify(allData));
         }
-        callback(allData);
+
+        
+        //callback(allData);
+        if(callback) {
+        	// callback({
+        	// 	data : allData,
+        	// 	length : allData.length
+        	// });
+			callback(allData);
+        }
     });
 };
 
@@ -93,26 +109,43 @@ exports.getData = function(req, res) {
 	var cachedData = cache.get(DATA_CACHE_KEY);
     var titleName = req.params.title;
 	var handleData = function(data) {
+		var length;
         if(titleName) {
             data = _.filter(data, function(each){
                 return each["Title"].toLowerCase() === titleName.toLowerCase();
             });
         }
-
+        length = data.length;
         if(start !== undefined) {
 	 		data = data.slice(start, start + num);
 	 	}
 
-	 	return data;
+	 	return {data : data, length : length};
 	};
 
 	if(!_.isEmpty(cachedData)) {
-		res.json(handleData(JSON.parse(cachedData[DATA_CACHE_KEY])));
+		var cData = JSON.parse(cachedData[DATA_CACHE_KEY]);
+		//var data = cData.slice();
+  //        if(titleName) {
+  //        	data = _.filter(data, function(d){
+  //        		return d["Title"] === titleName;
+
+  //        	});
+  //        }
+		// if(start !== undefined) {
+  //   		data = data.slice(start, start + num);
+  //   	}
+		res.json(handleData(cData));
 
 	} else {
+		//var query = titleName ? {field : "Title", value : titleName} : {};
         retrieve(function(d) {
+
+        	// if(start !== undefined) {
+        	// 	d.data = d.data.slice(start, start + num);
+        	// }
             res.json(handleData(d));
-        })
+        });
  	}
 
 };

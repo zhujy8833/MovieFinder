@@ -1,4 +1,7 @@
-<ul>
-    <li>{{Title}}</li>
-    <li>{{Locations}}</li>
+<ul class="template">
+    <li><span class="li-title">Title: </span><span>{{Title}}</span></li>
+    {{#Director}}<li><span class="li-title">Director: </span><span>{{Director}}</span></li>{{/Director}}
+    {{#actors}}<li><span class="li-title">Actors: </span><span>{{actors}}</span></li>{{/actors}}
+    {{#Production Company}}<li><span class="li-title">Production Company: </span><span>{{Production Company}}</span></li>{{/Production Company}}
+    {{#Release Year}}<li><span class="li-title">Release Yeaar: </span><span>{{Release Year}}</span></li>{{/Release Year}}
 </ul>
