@@ -8,7 +8,7 @@ a {
 	cursor: pointer;
 }
 .disabled {
-	pointer-event : none;
+	pointer-events : none;
 	opacity : 0.4;
 }
 

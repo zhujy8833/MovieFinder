@@ -18,7 +18,7 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/main.mu
 
             currentMarkers : [],
             events: {
-               "click .top-bar > button" : "buttonClick"
+               "click button.control-btn" : "buttonClick"
             },
             mapInit : function() {
                 var view = this;
@@ -81,8 +81,10 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/main.mu
                             dataLength : d.length
                         };
                         //if(view.listControl.start + view.listControl.num >= d.length - 1) {
+                        view.$(".top-bar").show();
                         view.$("#next").toggleClass("disabled", view.listControl.start + view.listControl.num >= d.length - 1);
                         view.$("#previous").toggleClass("disabled", view.listControl.start == 0);
+                        view.$("#page-text").html([view.listControl.start/view.listControl.num + 1, Math.round(d.length/view.listControl.num)].join(" / "));
                         //}
                         view.mapView = new MapView($.extend({el : "#map", map : view.map, geocoder : view.geocoder}, sharedObj));
                         view.listView = new ListView($.extend({el : "#list", mapView : view.mapView}, sharedObj));
