@@ -28,12 +28,36 @@ a {
 }
 
 .top-bar {
-	width: 70%;
-	margin: 0 auto;
+	width: 50%;
+	margin-left: 10%;
 }
 
 .top-bar > * {
 	display : inline-block;
+}
+
+.top-bar button{
+	cursor: pointer;
+
+}
+
+.top-bar button#previous::before{
+	content: "<<";
+	display: inline-block;
+	font-size: 0.7em;
+	vertical-align: middle;
+	margin-right: 5px;
+	margin-top: -2px;
+}
+
+.top-bar button#next::after{
+	content: ">>";
+	display: inline-block;
+	font-size: 0.7em;
+	vertical-align: middle;
+	margin-left: 5px;
+	margin-top: -2px;
+
 }
 
 .content{
@@ -54,10 +78,18 @@ ul.list-ul, ul.template{
 
 ul.list-ul li{
 	border: 1px solid gray;
+	width: 80%;
 	box-shadow: 2px 3px lightgray;
+	border-radius: 4px;
 	padding: 9px;
 	margin-top: 5px;
 	-webkit-transition: -webkit-transform .1s linear;
+	background: rgb(255,255,255); /* Old browsers */
+	background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(241,241,241,1) 41%, rgba(225,225,225,1) 66%, rgba(246,246,246,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(41%,rgba(241,241,241,1)), color-stop(66%,rgba(225,225,225,1)), color-stop(100%,rgba(246,246,246,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(241,241,241,1) 41%,rgba(225,225,225,1) 66%,rgba(246,246,246,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(241,241,241,1) 41%,rgba(225,225,225,1) 66%,rgba(246,246,246,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(241,241,241,1) 41%,rgba(225,225,225,1) 66%,rgba(246,246,246,1) 100%); /* IE10+ */
 	
 
 }

@@ -41,10 +41,11 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/main.mu
                 } else if(buttonId === 'next') {
                     view.listControl.start = view.listControl.start + view.listControl.num;
                 }
-                view.renderViews({
+
+                view.renderViews($.extend({
                     start : view.listControl.start,
                     num : view.listControl.num
-                });
+                }, view.searchTerm ? {title : view.searchTerm} : {}));
             },
 
             initialize : function(options) {
@@ -82,9 +83,9 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/main.mu
                         };
                         //if(view.listControl.start + view.listControl.num >= d.length - 1) {
                         view.$(".top-bar").show();
-                        view.$("#next").toggleClass("disabled", view.listControl.start + view.listControl.num >= d.length - 1);
+                        view.$("#next").toggleClass("disabled", view.listControl.start + view.listControl.num >= d.length);
                         view.$("#previous").toggleClass("disabled", view.listControl.start == 0);
-                        view.$("#page-text").html([view.listControl.start/view.listControl.num + 1, Math.round(d.length/view.listControl.num)].join(" / "));
+                        view.$("#page-text").html([view.listControl.start/view.listControl.num + 1, Math.ceil(d.length/view.listControl.num)].join(" / "));
                         //}
                         view.mapView = new MapView($.extend({el : "#map", map : view.map, geocoder : view.geocoder}, sharedObj));
                         view.listView = new ListView($.extend({el : "#list", mapView : view.mapView}, sharedObj));
@@ -97,6 +98,10 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/main.mu
                 });
             },
 
+            setListControl : function(listControl) {
+                var view = this;
+                view.listControl = listControl
+            },
 
             render : function() {
                 var view = this;
@@ -106,10 +111,14 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/main.mu
                     view.$("#search-for-movie").autocomplete({
                         source: view.movies,
                         select : function(event, ui) {
+                            view.setListControl(defaultOpt);
+                            view.searchTerm = ui.item.value;
                             view.renderViews($.extend({}, defaultOpt, {title : ui.item.value}));
                         }
                     }).on("change", function(e){
                             if(!$(this).val()) {
+                                view.searchTerm = null;
+                                view.setListControl(defaultOpt);
                                 view.renderViews(defaultOpt);
                             }
 
