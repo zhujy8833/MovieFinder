@@ -98,9 +98,10 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/main.mu
                 });
             },
 
-            setListControl : function(listControl) {
+            setListControl : function(opts) {
                 var view = this;
-                view.listControl = listControl
+                view.listControl.start = opts.start;
+                view.listControl.num = opts.num;
             },
 
             render : function() {
