@@ -4,6 +4,8 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/marker.
         var timeoutId;
         var MapView = Backbone.View.extend({
             markers : {},
+            markerTimeoutId : {},
+
             initialize : function(options) {
                 var view = this;
                 view.data = options.data || [];
@@ -34,6 +36,7 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/marker.
                 }
                 if(marker){
                     var infoWindow = marker.infoWindow;
+
                     infoWindow.open(view.map , marker);
                 }
             },
@@ -44,9 +47,11 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/marker.
                 if(marker.getAnimation() != null) {
                     marker.setAnimation(null);
                 } else {
-                    clearTimeout(timeoutId);
+                    _.each(view.markerTimeoutId,function(timeoutId){
+                        clearTimeout(timeoutId);
+                    });
                     marker.setAnimation(google.maps.Animation.BOUNCE);
-                    timeoutId = setTimeout(function(){
+                    view.markerTimeoutId[marker.markerId] = setTimeout(function(){
                         marker.setAnimation(null); 
                     }, 1400);
                 }
@@ -89,7 +94,7 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/marker.
                                 marker.markerId = d.id;
                                 marker.infoWindow = new google.maps.InfoWindow({
                                     content: Mustache.render(markerTemplate, d),
-                                    maxWidth : 200 
+                                    maxWidth : 400 
                                 });
 
                                 if(!view.markers[d.id]) {
