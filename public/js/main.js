@@ -21,7 +21,7 @@ require.config({
 
 });
 
-require(["jquery","backbone", "routers/IndexRoute"],function($, Backbone, IndexRoute){
+require(["jquery","backbone", "routers/MainRoute"],function($, Backbone, IndexRoute){
       var indexRoute = new IndexRoute();
       Backbone.history.start();
 });
