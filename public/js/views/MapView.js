@@ -30,6 +30,9 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/marker.
                 var view = this;
                 if(!allowMultiple) {
                     _.each(view.markers,function(marker){
+                        if(marker.infoWindow.isOpened) {
+                            marker.infoWindow.isOpened = false;
+                        }
                         marker.infoWindow.close();
                         marker.setAnimation(null);
                     });
@@ -38,6 +41,7 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/marker.
                     var infoWindow = marker.infoWindow;
 
                     infoWindow.open(view.map , marker);
+                    infoWindow.isOpened = true;
                 }
             },
 
@@ -103,8 +107,14 @@ define(["backbone", "underscore", "jquery", "mustache", "text!/templates/marker.
                                 view.parentView.currentMarkers.push(marker);
 
                                 google.maps.event.addListener(marker, 'click', function() {
-                                    view.markerOpenWindow(marker);
-                                    view.toggleBounce(marker);
+                                    if(marker.infoWindow && marker.infoWindow.isOpened) {
+                                        marker.infoWindow.close();
+                                        marker.setAnimation(null);
+                                    } else {
+                                        view.markerOpenWindow(marker);
+                                        view.toggleBounce(marker);
+ 
+                                    }
                                 }); 
                             }
                         },
