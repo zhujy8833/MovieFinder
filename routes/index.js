@@ -80,12 +80,7 @@ var retrieve = function(callback, field) {
         }
 
         
-        //callback(allData);
         if(callback) {
-        	// callback({
-        	// 	data : allData,
-        	// 	length : allData.length
-        	// });
 			callback(allData);
         }
     });
@@ -125,25 +120,10 @@ exports.getData = function(req, res) {
 
 	if(!_.isEmpty(cachedData)) {
 		var cData = JSON.parse(cachedData[DATA_CACHE_KEY]);
-		//var data = cData.slice();
-  //        if(titleName) {
-  //        	data = _.filter(data, function(d){
-  //        		return d["Title"] === titleName;
-
-  //        	});
-  //        }
-		// if(start !== undefined) {
-  //   		data = data.slice(start, start + num);
-  //   	}
 		res.json(handleData(cData));
 
 	} else {
-		//var query = titleName ? {field : "Title", value : titleName} : {};
         retrieve(function(d) {
-
-        	// if(start !== undefined) {
-        	// 	d.data = d.data.slice(start, start + num);
-        	// }
             res.json(handleData(d));
         });
  	}
