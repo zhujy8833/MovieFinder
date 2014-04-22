@@ -50,7 +50,9 @@ The frontend codes were built by utilizing the concepts of views in Backbone.js.
 	|-ListView
 	|-MapView
 ```
+
 1. **MainView**: Main view is containing two seperate divs for holding `ListView` and `MapView`, in addtion, it will include the top bar where the search input field and pagination control live. Its major responsiblities include:
+
 	- Initialize the map, as well as the google geocoder object for retrieving latitude and longtitude value
 	
 	- Retrieving the data from backend
