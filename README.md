@@ -30,7 +30,7 @@ The data is directly retrieved from: <https://data.sfgov.org/Arts-Culture-and-Re
 
 The web app should allow users to do or accomplish the following requirements.
 
-1. The app should show a list of the movies, including the basic information for each one, such as title, location address
+1. The app should show a list of movies, including the basic information for each one, such as title, location address
 
 2. The app should show a map where each movie record will be pinned based on the location information
 
@@ -50,7 +50,7 @@ The frontend codes were built by utilizing the concepts of views in Backbone.js.
 	|-ListView
 	|-MapView
 ```
-1. ** MainView **: Main view is containing two seperate divs for holding `ListView` and `MapView`, in addtion, it will include the top bar where the search input field and pagination control live. Its major responsiblities include:
+1. **MainView**: Main view is containing two seperate divs for holding `ListView` and `MapView`, in addtion, it will include the top bar where the search input field and pagination control live. Its major responsiblities include:
 	- Initialize the map, as well as the google geocoder object for retrieving latitude and longtitude value
 	
 	- Retrieving the data from backend
@@ -59,9 +59,9 @@ The frontend codes were built by utilizing the concepts of views in Backbone.js.
 	
 	- Rerender ListView and MapView when searching film by name, and go to prev/next page
 
-2. ** ListView **: ListView only holds the `<ul>` and use the Mustache template to populate the html. Its major task is only to render contents, based on the data retrieved. 
+2. **ListView**: ListView only holds the `<ul>` and use the Mustache template to populate the html. Its major task is only to render contents, based on the data retrieved. 
 
-3. ** MapView ** : MapView's task is similar to ListView, the only difference is it only paints/repaints the Map by pinning `markers` on the map which has been initialized in `MainView`. With that said, the map will only be created once, and all of the rest is to "render" markers on it. For each rendered marker, I stored the data id on it so that it is easy to find one marker by a certain data id in list.
+3. **MapView** : MapView's task is similar to ListView, the only difference is it only paints/repaints the Map by pinning `markers` on the map which has been initialized in `MainView`. With that said, the map will only be created once, and all of the rest is to "render" markers on it. For each rendered marker, I stored the data id on it so that it is easy to find one marker by a certain data id in list.
 
 4. **ListView --> MapView**: 
 There are some UI interactions occor between `ListView` and `MapView`, for example, clicking one item in list should highlight that matched marker in MapView, so that the user will understand visually regarding the exact location of the interested film. The approach is to passing `mapView` object to `listView`, so when an item clicked, it will trigger a `selectMarker` function, passing the itemId, and in MapView it can easily find the marker and call a Google API function on the `InfoWindow` of that marker, to expand the info window. 
